@@ -1,7 +1,21 @@
-node_modules/
-playwright-report/
-test-results/
-*.log
+# macOS
 .DS_Store
-package-lock.json
+**/.DS_Store
 
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Editor directories and files
+.vscode/*
+.idea
+*.swp
+*.swo
+*~
