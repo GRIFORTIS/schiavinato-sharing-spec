@@ -1,21 +1,29 @@
-# macOS
-.DS_Store
-**/.DS_Store
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.pdf
 
 # Node.js
 node_modules/
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Playwright
 test-results/
 playwright-report/
 playwright/.cache/
 
-# Editor directories and files
-.vscode/*
-.idea
-*.swp
-*.swo
-*~
+# Checksums (generated during release)
+CHECKSUMS.txt
+CHECKSUMS.json
+*.tar.gz
+*.tar.gz.sha256
+
+# Editor
+.DS_Store
+.vscode/
+.idea/

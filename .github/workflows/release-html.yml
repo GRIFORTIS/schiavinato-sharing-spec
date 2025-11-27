@@ -1,0 +1,79 @@
+name: Release HTML with Checksums
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  checksums:
+    name: Generate SHA256 Checksums
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Generate SHA256 checksums for HTML
+      run: |
+        cd reference-implementation
+        
+        # Generate checksums
+        echo "# SHA256 Checksums for Schiavinato Sharing HTML Implementation" > ../CHECKSUMS.txt
+        echo "" >> ../CHECKSUMS.txt
+        echo "Version: ${GITHUB_REF_NAME}" >> ../CHECKSUMS.txt
+        echo "Generated: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> ../CHECKSUMS.txt
+        echo "" >> ../CHECKSUMS.txt
+        echo "## HTML Implementation" >> ../CHECKSUMS.txt
+        echo "" >> ../CHECKSUMS.txt
+        
+        sha256sum schiavinato_sharing.html >> ../CHECKSUMS.txt
+        
+        echo "" >> ../CHECKSUMS.txt
+        echo "## Verification" >> ../CHECKSUMS.txt
+        echo "" >> ../CHECKSUMS.txt
+        echo "To verify:" >> ../CHECKSUMS.txt
+        echo "  cd reference-implementation" >> ../CHECKSUMS.txt
+        echo "  sha256sum -c ../CHECKSUMS.txt" >> ../CHECKSUMS.txt
+        
+        cd ..
+        
+        # JSON format
+        echo "{" > CHECKSUMS.json
+        echo "  \"version\": \"${GITHUB_REF_NAME}\"," >> CHECKSUMS.json
+        echo "  \"generated\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"," >> CHECKSUMS.json
+        echo "  \"checksums\": {" >> CHECKSUMS.json
+        cd reference-implementation
+        echo "    \"schiavinato_sharing.html\": \"$(sha256sum schiavinato_sharing.html | awk '{print $1}')\"" >> ../CHECKSUMS.json
+        cd ..
+        echo "  }" >> CHECKSUMS.json
+        echo "}" >> CHECKSUMS.json
+        
+        # Display
+        echo "=== Generated Checksums ==="
+        cat CHECKSUMS.txt
+    
+    - name: Create release tarball
+      run: |
+        tar -czf schiavinato-sharing-spec-${GITHUB_REF_NAME}.tar.gz \
+          reference-implementation/schiavinato_sharing.html \
+          WHITEPAPER.md \
+          TEST_VECTORS.md \
+          LICENSE \
+          CHECKSUMS.txt \
+          CHECKSUMS.json
+        
+        sha256sum schiavinato-sharing-spec-${GITHUB_REF_NAME}.tar.gz > schiavinato-sharing-spec-${GITHUB_REF_NAME}.tar.gz.sha256
+    
+    - name: Upload checksums to release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          CHECKSUMS.txt
+          CHECKSUMS.json
+          schiavinato-sharing-spec-*.tar.gz
+          schiavinato-sharing-spec-*.tar.gz.sha256
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
