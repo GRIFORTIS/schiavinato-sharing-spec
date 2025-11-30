@@ -2216,7 +2216,7 @@ TERMS OF USE & LIABILITY DISCLAIMER:
             globalChecksumShareGroup.className = 'form-group';
             const labelGlobalChecksum = document.createElement('label');
             labelGlobalChecksum.htmlFor = `recover-global-checksum-${shareIndex}`;
-            labelGlobalChecksum.textContent = `Global Checksum Verification Share`;
+            labelGlobalChecksum.textContent = `Global Checksum`;
             const inputGlobalChecksum = document.createElement('input');
             inputGlobalChecksum.type = 'text';
             inputGlobalChecksum.id = `recover-global-checksum-${shareIndex}`;
@@ -2772,7 +2772,7 @@ TERMS OF USE & LIABILITY DISCLAIMER:
                         <p><strong>Creation Date:</strong> ${metadata.date}</p>
                         <p><strong>Scheme:</strong> ${metadata.scheme}</p>
                         <p><strong>Share Number (X):</strong> ${share.shareNumber}</p>
-                        <p><strong>Global Checksum Verification Share:</strong> <code class="mono">${globalChecksumShareDisplay}</code></p>
+                        <p><strong>Global Checksum:</strong> <code class="mono">${globalChecksumShareDisplay}</code></p>
                     </div>
                     <h4 style="margin-top: 25px; margin-bottom: 10px; color: var(--text-muted); font-weight: 600;">Share Values (Y)</h4>
                     <div class="share-word-container">
@@ -3358,7 +3358,7 @@ TERMS OF USE & LIABILITY DISCLAIMER:
                         throw new Error(`Share #${share.shareNumber} does not contain ${rowCount} checksum values.`);
                     }
                     if (!Number.isInteger(share.globalChecksumVerificationShare)) {
-                        throw new Error(`Share #${share.shareNumber} is missing a global checksum verification share.`);
+                        throw new Error(`Share #${share.shareNumber} is missing a global checksum.`);
                     }
                 });
             }
